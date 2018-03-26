@@ -1,0 +1,46 @@
+.Treechat-container {
+  margin: 0;
+  width: 96vw;
+  padding: 2vw;
+  font-size: 5vw;
+  overflow: scroll;
+}
+
+.Treechat-full-container {
+  height: calc(100vh - 4vw);
+  text-align: center;
+}
+
+.Treechat-theme-green {
+  background-color: #780;
+  color: #eee;
+}
+
+.Treechat-theme-white {
+  background-color: #eee;
+  color: #780;
+}
+
+.Treechat-theme-blue {
+  background-color: #08b;
+  color: #eee;
+}
+
+.Treechat-theme-grey {
+  background-color: #22252A;
+  color: #eee;
+}
+
+.Treechat-section-header {
+  text-align: center;
+  margin: 2vh 0 2vh 0;
+}
+
+.Treechat-input-box {
+  margin: 1vw;
+  display: block;
+  color: #780;
+  font-family: sans-serif;
+  width: 92.5vw;
+  font-size: 5vw;
+}
