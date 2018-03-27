@@ -33,6 +33,8 @@ export function createConversation() {
         })
       })
     })
+
+    dispatch(editNewConversationName(''))
   }
 }
 
