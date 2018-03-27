@@ -1,0 +1,18 @@
+.CircleButton {
+  font-size: 7vw;
+
+  border-radius: 15vw;
+  width: 15vw;
+  height: 15vw;
+
+  line-height: 15vw;
+  text-align: center;
+
+  display: inline-block;
+
+  margin: 0 2vw 0 1vw;
+}
+
+.CircleButton-illuminated {
+  box-shadow: 0 0 3vw 1vw #0008;
+}

@@ -1,0 +1,58 @@
+.InputBar {
+  width: 92vw;
+  padding: 2vw;
+  border-radius: 1vw;
+  margin-bottom: 1vh;
+  background-color: #fff;
+
+  background-color: #08b;
+  color: #eee;
+}
+
+.InputBar textarea {
+  border: none;
+  font-size: 5vw;
+  font-family: sans-serif;
+  width: 50vw;
+  height: 10vw;
+
+  resize: none;
+  overflow: scroll;
+
+  background-color: #08b;
+  color: #eee;
+}
+.InputBar textarea::placeholder {
+  color: #aaa;
+}
+
+.InputBar-illuminated {
+  box-shadow: 0 0 3vw 1vw #0008;
+}
+
+.InputBar-icon {
+  background-color: #22252A;
+  color: #eee;
+
+  font-size: 7vw;
+
+  border-radius: 10vw;
+  width: 10vw;
+  height: 10vw;
+
+  line-height: 10vw;
+  text-align: center;
+
+  display: inline-block;
+
+  margin: 0 2vw 0 1vw;
+}
+
+.InputBar-left-icon {
+  vertical-align: top;
+}
+
+.InputBar-submit-icon {
+  float: right;
+  vertical-align: top;
+}
