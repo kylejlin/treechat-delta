@@ -1,10 +1,38 @@
 import firebase from '../firebase'
+import sha256 from 'js-sha256'
 
 const db = firebase.firestore()
 
 export function createConversation() {
   return (dispatch, getState) => {
-    // TODO
+    const state = getState()
+    const newRootText = state.fields.newConversationName
+    const uid = state.ownIdentity.uid
+
+    if (newRootText.length === 0) {
+      alert('Name your conversation.')
+      return
+    }
+
+    const uniqueConversationId =  sha256(
+      uid + newRootText + Date.now()
+    )
+    const conversationRef = db.collection('conversations').doc(uniqueConversationId)
+    const userRef = db.collection('users').doc(uid)
+
+    conversationRef.set({
+      rootText: newRootText,
+      members: [userRef],
+      messages: []
+    }).then(() => {
+      userRef.get().then(userDoc => {
+        const oldConversationRefs = userDoc.data().conversations
+        const newConversationRefs = oldConversationRefs.concat([conversationRef])
+        userRef.update({
+          conversations: newConversationRefs
+        })
+      })
+    })
   }
 }
 
