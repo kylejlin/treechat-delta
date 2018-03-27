@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import Login from './Login'
 import LoadingScreen from './LoadingScreen'
 import ConversationSelector from './ConversationSelector'
+import Conversation from './Conversation'
 
 const mapStateToProps = state => {
   return {
@@ -21,7 +22,7 @@ const TreechatRouter = ({ authState, conversationContents }) => {
   if (null === conversationContents) {
     return <ConversationSelector />
   }
-  return <p>Conversation goes here.</p>
+  return <Conversation />
 }
 
 export default connect(mapStateToProps, null)(TreechatRouter)

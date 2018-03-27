@@ -10,6 +10,33 @@ export default (state = initState, action) => {
           newConversationName: action.value
         }
       }
+    case 'EDIT_REPLY':
+      return {
+        ...state,
+        fields: {
+          ...state.fields,
+          reply: action.value
+        }
+      }
+    case 'EXIT_CONVERSATION':
+      return {
+        ...state,
+        conversationContents: null,
+        conversationUnsubscriber: null,
+        fields: {
+          ...state.fields,
+          focusedMessage: null,
+          reply: ''
+        }
+      }
+    case 'FOCUS_MESSAGE':
+      return {
+        ...state,
+        fields: {
+          ...state.fields,
+          focusedMessage: action.focusedMessage
+        }
+      }
     case 'LOGIN':
       return {
         ...state,
@@ -59,6 +86,14 @@ export default (state = initState, action) => {
         uiState: {
           ...state.uiState,
           isNewConversationNameInputFocused: action.value
+        }
+      }
+    case 'UPDATE_REPLY_INPUT_FOCUS':
+      return {
+        ...state,
+        uiState: {
+          ...state.uiState,
+          isReplyInputFocused: action.value
         }
       }
     default:

@@ -42,6 +42,18 @@ export function editNewConversationName(value) {
   return { type: 'EDIT_NEW_CONVERSATION_NAME', value }
 }
 
+export function editReply(value) {
+  return { type: 'EDIT_REPLY', value }
+}
+
+export function exitConversation() {
+  return { type: 'EXIT_CONVERSATION' }
+}
+
+export function focusMessage(focusedMessage) {
+  return { type: 'FOCUS_MESSAGE', focusedMessage }
+}
+
 export function getAndHandleAuthState() {
   return (dispatch, getState) => {
     firebase.auth().onAuthStateChanged(user => {
@@ -184,11 +196,30 @@ export function signInWithGoogleRedirect() {
 
 function storeConversationSummaries(conversationSummaries) {
   return { type: 'STORE_CONVERSATION_SUMMARIES', conversationSummaries }
-  // TODO: reducer
+}
+
+export function submitReply() {
+  return (dispatch, getState) => {
+    // TODO firestore
+    alert('Replying with: ' + getState().fields.reply)
+  }
+}
+
+export function unsubscribeAndExitConversation() {
+  return (dispatch, getState) => {
+    const unsubscribe = getState().conversationUnsubscriber
+    unsubscribe()
+
+    dispatch(exitConversation())
+  }
 }
 
 export function updateNewConversationNameInputFocus(value) {
   return { type: 'UPDATE_NEW_CONVERSATION_NAME_INPUT_FOCUS', value }
+}
+
+export function updateReplyInputFocus(value) {
+  return { type: 'UPDATE_REPLY_INPUT_FOCUS', value }
 }
 
 export function withdrawFromSelectedConversation() {

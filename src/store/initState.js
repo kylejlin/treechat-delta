@@ -15,9 +15,11 @@ export default {
   fields: {
     newConversationName: '',
     selectedConversation: null,
-    focusedMessage: null
+    focusedMessage: null,
+    reply: ''
   },
   uiState: {
-    isNewConversationNameInputFocused: false
+    isNewConversationNameInputFocused: false,
+    isReplyInputFocused: false
   }
 }
