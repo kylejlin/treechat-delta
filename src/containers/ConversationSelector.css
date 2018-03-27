@@ -1,0 +1,9 @@
+.ConversationSelector-conversations-container {
+  height: calc(100vh - 23vw);
+}
+
+.ConversationSelector-actions-container {
+  position: fixed;
+  bottom: 0;
+  height: 15vw;
+}
