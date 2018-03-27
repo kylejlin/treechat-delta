@@ -99,14 +99,70 @@ function login(ownName, ownUid) {
   return { type: 'LOGIN', ownName, ownUid }
 }
 
+function navigateToConversation(conversationContents, conversationUnsubscriber) {
+  return { type: 'NAVIGATE_TO_CONVERSATION', conversationContents, conversationUnsubscriber }
+}
+
 function navigateToLoginPage() {
   return { type: 'NAVIGATE_TO_LOGIN_PAGE' }
 }
 
 export function openSelectedConversation() {
-  // TODO: Reducer
-  alert('Opening...')
-  return { type: 'OPEN_SELECTED_CONVERSATION' }
+  return (dispatch, getState) => {
+    const state = getState()
+    const conversationSummary = state.fields.selectedConversation
+    const {
+      ref: conversationRef,
+      rootText,
+      memberRefs,
+      messageRefs,
+    } = conversationSummary
+
+    const unsubscribe = conversationRef.onSnapshot(conversationDoc => {
+      // 1) Get and store the name of each member in a dictionary of the form
+      //    <reference id, displayName> for easy lookups in the future
+      const memberNamePromises = memberRefs.map(memberRef => new Promise((resolve, reject) => {
+        memberRef.get().then(memberDoc => {
+          resolve({
+            id: memberRef.id,
+            name: memberDoc.data().displayName
+          })
+        })
+      }))
+      const memberNameDictPromise = Promise.all(memberNamePromises).then(nameMaps => {
+        const memberNameDict = {}
+
+        for (let nameMap of nameMaps) {
+          memberNameDict[nameMap.id] = nameMap.name
+        }
+
+        return memberNameDict
+      })
+
+      // 2) Get and store all texts of messages in an array
+      const messagePromises = messageRefs.map(messageRef => new Promise((resolve, reject) => {
+        messageRef.get().then(messageDoc => {
+          const data = messageDoc.data()
+          resolve({
+            authorId: data.author.id,
+            text: data.text,
+            parentId: data.parent ? data.parent.id : null,
+            messageId: messageRef.id
+          })
+        })
+      }))
+      const messageArrayPromise = Promise.all(messagePromises)
+
+      Promise.all([memberNameDictPromise, messageArrayPromise]).then(([memberNameDict, messageArray]) => {
+        const conversationContents = {
+          rootText,
+          memberNameDict,
+          messageArray
+        }
+        dispatch(navigateToConversation(conversationContents, unsubscribe))
+      })
+    })
+  }
 }
 
 export function openSelectedConversationMemberMenu() {

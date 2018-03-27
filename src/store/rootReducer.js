@@ -22,6 +22,16 @@ export default (state = initState, action) => {
           uid: action.ownUid
         }
       }
+    case 'NAVIGATE_TO_CONVERSATION':
+      return {
+        ...state,
+        conversationContents: action.conversationContents,
+        conversationUnsubscriber: action.conversationUnsubscriber,
+        fields: {
+          ...state.fields,
+          focusedMessage: null
+        }
+      }
     case 'NAVIGATE_TO_LOGIN_PAGE':
       return {
         ...state,

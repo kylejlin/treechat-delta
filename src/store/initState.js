@@ -8,10 +8,14 @@ export default {
     uid: null
   },
   conversationSummaries: [],
+  conversationContents: null,
+  conversationUnsubscriber: () => {
+    throw new TypeError('state.conversationUnsubscriber is not a function')
+  },
   fields: {
     newConversationName: '',
     selectedConversation: null,
-    focusedConversation: null
+    focusedMessage: null
   },
   uiState: {
     isNewConversationNameInputFocused: false
