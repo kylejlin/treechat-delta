@@ -126,6 +126,7 @@ const Conversation = ({
           text: '?'
         }}
         onClick={() => focusMessage(null)}
+        isIlluminated={!isReplyInputFocused && (focusedMessage === null)}
       />
       {parentMessages.map(message => (
         <BarButton
