@@ -8,6 +8,8 @@ import CircleButton from '../components/CircleButton'
 import InputBar from '../components/InputBar'
 
 import {
+  unselectConversationAndUnconfirmSignOut,
+
   editNewConversationName,
   updateNewConversationNameInputFocus,
   createConversation,
@@ -15,8 +17,21 @@ import {
   selectConversation,
   openSelectedConversation,
   withdrawFromSelectedConversation,
-  openSelectedConversationMemberMenu
+  openSelectedConversationMemberMenu,
+
+  confirmSignOut,
+  actuallySignOut
 } from '../store/actions'
+
+
+
+const createBackgroundClickHandler = handler => {
+  return e => {
+    if (e.target.classList && e.target.classList.contains('Treechat-container')) {
+      handler()
+    }
+  }
+}
 
 
 
@@ -26,12 +41,17 @@ const mapStateToProps = state => {
     conversationSummaries: state.conversationSummaries,
     newConversationName: state.fields.newConversationName,
     isNewConversationNameInputFocused: state.uiState.isNewConversationNameInputFocused,
-    selectedConversation: state.fields.selectedConversation
+    selectedConversation: state.fields.selectedConversation,
+    isConfirmingSignOut: state.uiState.isConfirmingSignOut
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
+    onBackgroundClick: () => {
+      dispatch(unselectConversationAndUnconfirmSignOut())
+    },
+
     editNewConversationName: value => {
       dispatch(editNewConversationName(value))
     },
@@ -53,11 +73,20 @@ const mapDispatchToProps = dispatch => {
     },
     openSelectedConversationMemberMenu: () => {
       dispatch(openSelectedConversationMemberMenu())
+    },
+
+    confirmSignOut: () => {
+      dispatch(confirmSignOut())
+    },
+    actuallySignOut: () => {
+      dispatch(actuallySignOut())
     }
   }
 }
 
 const ConversationSelector = ({
+  onBackgroundClick,
+
   ownName,
 
   conversationSummaries,
@@ -77,11 +106,14 @@ const ConversationSelector = ({
   /*invitee,
   editInvitee,
   addInvitee,
+  */
 
-  signOut*/
+  isConfirmingSignOut,
+  confirmSignOut,
+  actuallySignOut
 }) => {
   return (
-    <div className="Treechat">
+    <div className="Treechat ConversationSelector" onClick={createBackgroundClickHandler(onBackgroundClick)}>
       <div className="ConversationSelector-conversations-container Treechat-container Treechat-theme-green">
         <div className="Treechat-section-header">Conversations</div>
         {conversationSummaries.map((conversationSummary, i) => (
@@ -113,6 +145,17 @@ const ConversationSelector = ({
             isIlluminated={isNewConversationNameInputFocused}
           />
         </div>
+        <BarButton
+          onClick={isConfirmingSignOut ? actuallySignOut : confirmSignOut}
+          text={!isConfirmingSignOut ? 'Sign out' : 'Tap again to confirm sign out'}
+          icon={{
+            text: 'x',
+            backgroundColor: '#eee',
+            color: '#921'
+          }}
+          theme="red"
+          isIlluminated={isConfirmingSignOut}
+        />
       </div>
       <div className="ConversationSelector-actions-container Treechat-container Treechat-theme-grey">
         {(!isNewConversationNameInputFocused && selectedConversation) ?

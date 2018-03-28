@@ -3,6 +3,16 @@ import sha256 from 'js-sha256'
 
 const db = firebase.firestore()
 
+export function actuallySignOut() {
+  return (dispatch, getState) => {
+    firebase.auth().signOut()
+  }
+}
+
+export function confirmSignOut() {
+  return { type: 'CONFIRM_SIGN_OUT' }
+}
+
 export function createConversation() {
   return (dispatch, getState) => {
     const state = getState()
@@ -237,6 +247,10 @@ export function submitReply() {
 
     dispatch(editReply(''))
   }
+}
+
+export function unselectConversationAndUnconfirmSignOut() {
+  return { type: 'UNSELECT_CONVERSATION_AND_UNCONFIRM_SIGN_OUT' }
 }
 
 export function unsubscribeAndExitConversation() {

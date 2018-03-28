@@ -31,6 +31,11 @@
   color: #eee;
 }
 
+.Treechat-theme-red {
+  background-color: #921;
+  color: #eee;
+}
+
 .Treechat-section-header {
   text-align: center;
   margin: 2vh 0 2vh 0;

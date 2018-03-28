@@ -2,6 +2,14 @@ import initState from './initState'
 
 export default (state = initState, action) => {
   switch (action.type) {
+    case 'CONFIRM_SIGN_OUT':
+      return {
+        ...state,
+        uiState: {
+          ...state.uiState,
+          isConfirmingSignOut: true
+        }
+      }
     case 'EDIT_NEW_CONVERSATION_NAME':
       return {
         ...state,
@@ -75,6 +83,18 @@ export default (state = initState, action) => {
       return {
         ...state,
         conversationSummaries: action.conversationSummaries
+      }
+    case 'UNSELECT_CONVERSATION_AND_UNCONFIRM_SIGN_OUT':
+      return {
+        ...state,
+        fields: {
+          ...state.fields,
+          selectedConversation: null
+        },
+        uiState: {
+          ...state.uiState,
+          isConfirmingSignOut: false
+        }
       }
     case 'UPDATE_NEW_CONVERSATION_NAME_INPUT_FOCUS':
       return {

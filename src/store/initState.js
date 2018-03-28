@@ -20,6 +20,7 @@ export default {
   },
   uiState: {
     isNewConversationNameInputFocused: false,
-    isReplyInputFocused: false
+    isReplyInputFocused: false,
+    isConfirmingSignOut: false
   }
 }
