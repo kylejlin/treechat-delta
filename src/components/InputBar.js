@@ -28,12 +28,14 @@ export default ({
   isIlluminated
 }) => (
   <div className={'InputBar ' + (isIlluminated ? ' InputBar-illuminated' : '')}>
-    <div className="InputBar-icon InputBar-left-icon" style={{
-      backgroundColor: leftIcon.backgroundColor || defaultLeftIcon.backgroundColor,
-      color: leftIcon.color || defaultLeftIcon.color
-    }}>
-      {leftIcon.text || defaultLeftIcon.text}
-    </div>
+    {(leftIcon !== null) &&
+      <div className="InputBar-icon InputBar-left-icon" style={{
+        backgroundColor: leftIcon.backgroundColor || defaultLeftIcon.backgroundColor,
+        color: leftIcon.color || defaultLeftIcon.color
+      }}>
+        {leftIcon.text || defaultLeftIcon.text}
+      </div>
+    }
 
     <textarea
       type="text"
