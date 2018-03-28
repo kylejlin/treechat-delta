@@ -5,6 +5,10 @@ export default (state = initState, action) => {
     case 'CONFIRM_SIGN_OUT':
       return {
         ...state,
+        fields: {
+          ...state.fields,
+          selectedConversation: null
+        },
         uiState: {
           ...state.uiState,
           isConfirmingSignOut: true
@@ -77,6 +81,10 @@ export default (state = initState, action) => {
         fields: {
           ...state.fields,
           selectedConversation: action.conversationSummary
+        },
+        uiState: {
+          ...state.uiState,
+          isConfirmingSignOut: false
         }
       }
     case 'STORE_CONVERSATION_SUMMARIES':
@@ -101,7 +109,8 @@ export default (state = initState, action) => {
         ...state,
         uiState: {
           ...state.uiState,
-          isNewConversationNameInputFocused: action.value
+          isNewConversationNameInputFocused: action.value,
+          isConfirmingSignOut: false
         }
       }
     case 'UPDATE_REPLY_INPUT_FOCUS':
