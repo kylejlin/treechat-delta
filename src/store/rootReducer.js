@@ -53,11 +53,7 @@ export default (state = initState, action) => {
       return {
         ...state,
         conversationContents: action.conversationContents,
-        conversationUnsubscriber: action.conversationUnsubscriber,
-        fields: {
-          ...state.fields,
-          focusedMessage: null
-        }
+        conversationUnsubscriber: action.conversationUnsubscriber
       }
     case 'NAVIGATE_TO_LOGIN_PAGE':
       return {

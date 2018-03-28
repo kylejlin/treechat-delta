@@ -125,12 +125,14 @@ export function openSelectedConversation() {
     const conversationSummary = state.fields.selectedConversation
     const {
       ref: conversationRef,
-      rootText,
-      memberRefs,
-      messageRefs,
+      rootText
     } = conversationSummary
 
     const unsubscribe = conversationRef.onSnapshot(conversationDoc => {
+      const {
+        members: memberRefs,
+        messages: messageRefs
+      } = conversationDoc.data()
       // 1) Get and store the name of each member in a dictionary of the form
       //    <reference id, displayName> for easy lookups in the future
       const memberNamePromises = memberRefs.map(memberRef => new Promise((resolve, reject) => {
@@ -167,6 +169,7 @@ export function openSelectedConversation() {
 
       Promise.all([memberNameDictPromise, messageArrayPromise]).then(([memberNameDict, messageArray]) => {
         const conversationContents = {
+          ref: conversationRef,
           rootText,
           memberNameDict,
           messageArray
@@ -200,8 +203,39 @@ function storeConversationSummaries(conversationSummaries) {
 
 export function submitReply() {
   return (dispatch, getState) => {
-    // TODO firestore
-    alert('Replying with: ' + getState().fields.reply)
+    const state = getState()
+
+    const conversationRef = state.conversationContents.ref
+
+    const { uid } = state.ownIdentity
+    const userRef = db.collection('users').doc(uid)
+
+    const messageText = state.fields.reply
+    const uniqueMessageId =  sha256(
+      uid + messageText + Date.now()
+    )
+    const messageRef = db.collection('messages').doc(uniqueMessageId)
+
+    const { focusedMessage } = state.fields
+    const parentMessageRef = focusedMessage === null
+      ? null
+      : db.collection('messages').doc(focusedMessage.messageId)
+
+    messageRef.set({
+      text: messageText,
+      author: userRef,
+      parent: parentMessageRef,
+      conversation: conversationRef
+    }).then(() => {
+      conversationRef.get().then(conversationDoc => {
+        const { messages: existingMessageRefs } = conversationDoc.data()
+        conversationRef.update({
+          messages: existingMessageRefs.concat([messageRef])
+        })
+      })
+    })
+
+    dispatch(editReply(''))
   }
 }
 
