@@ -28,10 +28,10 @@ const getParentMessagesFromState = state => {
 
   const parentMessages = []
   let currentMessage = focusedMessage
+  const isMessageTheParent = message =>
+    message.messageId === currentMessage.parentId
   while (currentMessage.parentId !== null) {
-    const parentMessage = state.conversationContents.messageArray.find(message => {
-      return message.messageId === currentMessage.parentId
-    })
+    const parentMessage = state.conversationContents.messageArray.find(isMessageTheParent)
     parentMessages.push(parentMessage)
     currentMessage = parentMessage
   }
