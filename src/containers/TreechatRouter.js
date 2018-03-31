@@ -5,6 +5,7 @@ import JoinPage from './JoinPage'
 import LoadingScreen from './LoadingScreen'
 import ConversationSelector from './ConversationSelector'
 import MemberMenu from './MemberMenu'
+import ConversationWithdrawalConfirmation from './ConversationWithdrawalConfirmation'
 import Conversation from './Conversation'
 
 const mapStateToProps = state => {
@@ -12,11 +13,12 @@ const mapStateToProps = state => {
     authState: state.authState,
     ownIdentity: state.ownIdentity,
     conversationContents: state.conversationContents,
-    memberMenu: state.memberMenu
+    memberMenu: state.memberMenu,
+    isConfirmingWithdrawal: state.uiState.isConfirmingWithdrawal
   }
 }
 
-const TreechatRouter = ({ authState, ownIdentity, conversationContents, memberMenu }) => {
+const TreechatRouter = ({ authState, ownIdentity, conversationContents, memberMenu, isConfirmingWithdrawal }) => {
   if (!authState.isKnown) {
     return <LoadingScreen />
   }
@@ -29,6 +31,9 @@ const TreechatRouter = ({ authState, ownIdentity, conversationContents, memberMe
   if (null === conversationContents) {
     if (memberMenu) {
       return <MemberMenu />
+    }
+    if (isConfirmingWithdrawal) {
+      return <ConversationWithdrawalConfirmation />
     }
     return <ConversationSelector />
   }

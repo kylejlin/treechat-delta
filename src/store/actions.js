@@ -14,7 +14,6 @@ export function addMemberToConversation() {
   return (dispatch, getState) => {
     const state = getState()
     const { newMemberUsername } = state.fields
-    const { uid } = state.ownIdentity
     const { conversationRef } = state.memberMenu
 
     if (newMemberUsername === '') {
@@ -58,6 +57,10 @@ function clearOwnIdentity() {
 
 export function confirmSignOut() {
   return { type: 'CONFIRM_SIGN_OUT' }
+}
+
+export function confirmWithdrawalFromSelectedConversation() {
+  return { type: 'CONFIRM_WITHDRAWAL_FROM_SELECTED_CONVERSATION' }
 }
 
 export function createConversation() {
@@ -117,6 +120,10 @@ export function exitConversation() {
 
 function exitMemberMenu() {
   return { type: 'EXIT_MEMBER_MENU' }
+}
+
+export function exitWithdrawalConfirmationPage() {
+  return { type: 'EXIT_WITHDRAWAL_CONFIRMATION_PAGE' }
 }
 
 export function focusMessage(focusedMessage) {
@@ -413,7 +420,7 @@ export function withdrawFromSelectedConversation() {
     const userRef = db.collection('users').doc(uid)
 
     conversationRef.get().then(conversationDoc => {
-      const { members: memberRefs } = conversationDoc.data()
+      const { members: memberRefs, messages: messageRefs } = conversationDoc.data()
       const updatedMemberRefs = memberRefs.filter(memberRef => {
         return memberRef.id !== uid
       })
@@ -422,7 +429,11 @@ export function withdrawFromSelectedConversation() {
         ? conversationRef.update({
           members: updatedMemberRefs
         })
-        : conversationRef.delete()
+        : conversationRef.delete().then(() => {
+          const messagePromises = messageRefs.map(messageRef => messageRef.delete())
+          return Promise.all(messagePromises)
+        })
+
       withdrawalPromise.then(() => {
         userRef.get().then(userDoc => {
           const { conversations: conversationRefs } = userDoc.data()
@@ -435,5 +446,7 @@ export function withdrawFromSelectedConversation() {
         })
       })
     })
+
+    dispatch(exitWithdrawalConfirmationPage())
   }
 }

@@ -25,6 +25,7 @@ export default {
     isNewConversationNameInputFocused: false,
     isReplyInputFocused: false,
     isConfirmingSignOut: false,
-    isNewMemberUsernameInputFocused: false
+    isNewMemberUsernameInputFocused: false,
+    isConfirmingWithdrawal: false
   }
 }

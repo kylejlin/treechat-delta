@@ -23,6 +23,14 @@ export default (state = initState, action) => {
           isConfirmingSignOut: true
         }
       }
+    case 'CONFIRM_WITHDRAWAL_FROM_SELECTED_CONVERSATION':
+      return {
+        ...state,
+        uiState: {
+          ...state.uiState,
+          isConfirmingWithdrawal: true
+        }
+      }
     case 'EDIT_NEW_CONVERSATION_NAME':
       return {
         ...state,
@@ -73,6 +81,14 @@ export default (state = initState, action) => {
         fields: {
           ...state.fields,
           newMemberUsername: ''
+        }
+      }
+    case 'EXIT_WITHDRAWAL_CONFIRMATION_PAGE':
+      return {
+        ...state,
+        uiState: {
+          ...state.uiState,
+          isConfirmingWithdrawal: false
         }
       }
     case 'FOCUS_MESSAGE':

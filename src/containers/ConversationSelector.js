@@ -16,7 +16,7 @@ import {
 
   selectConversation,
   openSelectedConversation,
-  withdrawFromSelectedConversation,
+  confirmWithdrawalFromSelectedConversation,
   openSelectedConversationMemberMenu,
 
   confirmSignOut,
@@ -68,8 +68,8 @@ const mapDispatchToProps = dispatch => {
     openSelectedConversation: () => {
       dispatch(openSelectedConversation())
     },
-    withdrawFromSelectedConversation: () => {
-      dispatch(withdrawFromSelectedConversation())
+    confirmWithdrawalFromSelectedConversation: () => {
+      dispatch(confirmWithdrawalFromSelectedConversation())
     },
     openSelectedConversationMemberMenu: () => {
       dispatch(openSelectedConversationMemberMenu())
@@ -100,7 +100,7 @@ const ConversationSelector = ({
   selectedConversation,
   selectConversation,
   openSelectedConversation,
-  withdrawFromSelectedConversation,
+  confirmWithdrawalFromSelectedConversation,
   openSelectedConversationMemberMenu,
 
   /*invitee,
@@ -172,7 +172,7 @@ const ConversationSelector = ({
               icon={{
                 text: 'x'
               }}
-              onClick={withdrawFromSelectedConversation}
+              onClick={confirmWithdrawalFromSelectedConversation}
             />
             <CircleButton
               theme="blue"
