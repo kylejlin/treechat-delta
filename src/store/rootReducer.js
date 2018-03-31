@@ -2,6 +2,15 @@ import initState from './initState'
 
 export default (state = initState, action) => {
   switch (action.type) {
+    case 'CLEAR_OWN_IDENTITY':
+      return {
+        ...state,
+        ownIdentity: initState.ownIdentity,
+        authState: {
+          isKnown: true,
+          isLoggedIn: false
+        }
+      }
     case 'CONFIRM_SIGN_OUT':
       return {
         ...state,
@@ -28,6 +37,14 @@ export default (state = initState, action) => {
         fields: {
           ...state.fields,
           reply: action.value
+        }
+      }
+    case 'EDIT_USERNAME':
+      return {
+        ...state,
+        fields: {
+          ...state.fields,
+          username: action.value
         }
       }
     case 'EXIT_CONVERSATION':
@@ -66,6 +83,18 @@ export default (state = initState, action) => {
         ...state,
         conversationContents: action.conversationContents,
         conversationUnsubscriber: action.conversationUnsubscriber
+      }
+    case 'NAVIGATE_TO_JOIN_PAGE':
+      return {
+        ...state,
+        authState: {
+          isKnown: true,
+          isLoggedIn: false
+        },
+        ownIdentity: {
+          name: action.displayName,
+          uid: action.uid
+        }
       }
     case 'NAVIGATE_TO_LOGIN_PAGE':
       return {

@@ -16,7 +16,8 @@ export default {
     newConversationName: '',
     selectedConversation: null,
     focusedMessage: null,
-    reply: ''
+    reply: '',
+    username: ''
   },
   uiState: {
     isNewConversationNameInputFocused: false,

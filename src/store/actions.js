@@ -6,7 +6,12 @@ const db = firebase.firestore()
 export function actuallySignOut() {
   return (dispatch, getState) => {
     firebase.auth().signOut()
+    dispatch(clearOwnIdentity())
   }
+}
+
+function clearOwnIdentity() {
+  return { type: 'CLEAR_OWN_IDENTITY' }
 }
 
 export function confirmSignOut() {
@@ -56,6 +61,10 @@ export function editReply(value) {
   return { type: 'EDIT_REPLY', value }
 }
 
+export function editUsername(value) {
+  return { type: 'EDIT_USERNAME', value }
+}
+
 export function exitConversation() {
   return { type: 'EXIT_CONVERSATION' }
 }
@@ -72,20 +81,13 @@ export function getAndHandleAuthState() {
         const userRef = db.collection('users').doc(uid)
         userRef.get().then(userDoc => {
           if (userDoc.exists) {
-            const { displayName } = userDoc.data()
+            const { displayName } = userDoc.data() || ''
             dispatch(login(displayName, uid))
             userRef.onSnapshot(userDoc => {
               dispatch(getAndStoreConversationRefs(userDoc.data().conversations))
             })
           } else {
-            userRef.set({
-              displayName,
-              conversations: []
-            })
-            dispatch(login(displayName, uid))
-            userRef.onSnapshot(userDoc => {
-              dispatch(getAndStoreConversationRefs(userDoc.data().conversations))
-            })
+            dispatch(navigateToJoinPage(uid, displayName))
           }
         })
       } else {
@@ -117,12 +119,48 @@ function getAndStoreConversationRefs(refs) {
   }
 }
 
+export function joinWithGoogle() {
+  return (dispatch, getState) => {
+    const state = getState()
+    const { username } = state.fields
+    const { uid, name: displayName } = state.ownIdentity
+
+    if (username === '') {
+      return
+    }
+
+    const usernameRef = db.collection('usernames').doc(username)
+    const userRef = db.collection('users').doc(uid)
+
+    usernameRef.set({
+      uid
+    }).then(() => {
+      userRef.set({
+        displayName,
+        conversations: [],
+        username: usernameRef
+      }).then(() => {
+        dispatch(login(displayName, uid))
+        userRef.onSnapshot(userDoc => {
+          dispatch(getAndStoreConversationRefs(userDoc.data().conversations))
+        })
+      }).catch(() => {
+        alert('Username taken!')
+      })
+    })
+  }
+}
+
 function login(ownName, ownUid) {
   return { type: 'LOGIN', ownName, ownUid }
 }
 
 function navigateToConversation(conversationContents, conversationUnsubscriber) {
   return { type: 'NAVIGATE_TO_CONVERSATION', conversationContents, conversationUnsubscriber }
+}
+
+function navigateToJoinPage(uid, displayName) {
+  return { type: 'NAVIGATE_TO_JOIN_PAGE', uid, displayName }
 }
 
 function navigateToLoginPage() {
@@ -147,9 +185,11 @@ export function openSelectedConversation() {
       //    <reference id, displayName> for easy lookups in the future
       const memberNamePromises = memberRefs.map(memberRef => new Promise((resolve, reject) => {
         memberRef.get().then(memberDoc => {
+          const data = memberDoc.data()
           resolve({
             id: memberRef.id,
-            name: memberDoc.data().displayName
+            displayName: data.displayName,
+            username: data.username.id
           })
         })
       }))
@@ -157,7 +197,10 @@ export function openSelectedConversation() {
         const memberNameDict = {}
 
         for (let nameMap of nameMaps) {
-          memberNameDict[nameMap.id] = nameMap.name
+          memberNameDict[nameMap.id] = {
+            displayName: nameMap.displayName,
+            username: nameMap.username
+          }
         }
 
         return memberNameDict
