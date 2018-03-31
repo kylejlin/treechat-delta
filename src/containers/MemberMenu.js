@@ -88,12 +88,12 @@ const MemberMenu = ({
       <BarButton
         onClick={exitMemberMenu}
         text="Back"
+        theme="grey"
         icon={{
-          text: '<',
           backgroundColor: '#eee',
-          color: '#921'
+          color: '#333',
+          text: '<'
         }}
-        theme="red"
       />
     </div>
   )
