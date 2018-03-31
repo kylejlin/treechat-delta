@@ -31,6 +31,14 @@ export default (state = initState, action) => {
           newConversationName: action.value
         }
       }
+    case 'EDIT_NEW_MEMBER_USERNAME':
+      return {
+        ...state,
+        fields: {
+          ...state.fields,
+          newMemberUsername: action.value
+        }
+      }
     case 'EDIT_REPLY':
       return {
         ...state,
@@ -56,6 +64,15 @@ export default (state = initState, action) => {
           ...state.fields,
           focusedMessage: null,
           reply: ''
+        }
+      }
+    case 'EXIT_MEMBER_MENU':
+      return {
+        ...state,
+        memberMenu: null,
+        fields: {
+          ...state.fields,
+          newMemberUsername: ''
         }
       }
     case 'FOCUS_MESSAGE':
@@ -104,6 +121,12 @@ export default (state = initState, action) => {
           isLoggedIn: false
         }
       }
+    case 'NAVIGATE_TO_MEMBER_MENU':
+      return {
+        ...state,
+        memberMenu: action.memberMenu,
+        conversationUnsubscriber: action.conversationUnsubscriber
+      }
     case 'SELECT_CONVERSATION':
       return {
         ...state,
@@ -140,6 +163,14 @@ export default (state = initState, action) => {
           ...state.uiState,
           isNewConversationNameInputFocused: action.value,
           isConfirmingSignOut: false
+        }
+      }
+    case 'UPDATE_NEW_MEMBER_USERNAME_INPUT_FOCUS':
+      return {
+        ...state,
+        uiState: {
+          ...state.uiState,
+          isNewMemberUsernameInputFocused: action.value
         }
       }
     case 'UPDATE_REPLY_INPUT_FOCUS':

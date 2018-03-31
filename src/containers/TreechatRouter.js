@@ -4,17 +4,19 @@ import Login from './Login'
 import JoinPage from './JoinPage'
 import LoadingScreen from './LoadingScreen'
 import ConversationSelector from './ConversationSelector'
+import MemberMenu from './MemberMenu'
 import Conversation from './Conversation'
 
 const mapStateToProps = state => {
   return {
     authState: state.authState,
     ownIdentity: state.ownIdentity,
-    conversationContents: state.conversationContents
+    conversationContents: state.conversationContents,
+    memberMenu: state.memberMenu
   }
 }
 
-const TreechatRouter = ({ authState, ownIdentity, conversationContents }) => {
+const TreechatRouter = ({ authState, ownIdentity, conversationContents, memberMenu }) => {
   if (!authState.isKnown) {
     return <LoadingScreen />
   }
@@ -25,6 +27,9 @@ const TreechatRouter = ({ authState, ownIdentity, conversationContents }) => {
     return <Login />
   }
   if (null === conversationContents) {
+    if (memberMenu) {
+      return <MemberMenu />
+    }
     return <ConversationSelector />
   }
   return <Conversation />

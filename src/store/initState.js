@@ -9,6 +9,7 @@ export default {
   },
   conversationSummaries: [],
   conversationContents: null,
+  memberMenu: null,
   conversationUnsubscriber: () => {
     throw new TypeError('state.conversationUnsubscriber is not a function')
   },
@@ -17,11 +18,13 @@ export default {
     selectedConversation: null,
     focusedMessage: null,
     reply: '',
-    username: ''
+    username: '',
+    newMemberUsername: ''
   },
   uiState: {
     isNewConversationNameInputFocused: false,
     isReplyInputFocused: false,
-    isConfirmingSignOut: false
+    isConfirmingSignOut: false,
+    isNewMemberUsernameInputFocused: false
   }
 }

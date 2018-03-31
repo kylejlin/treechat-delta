@@ -10,6 +10,48 @@ export function actuallySignOut() {
   }
 }
 
+export function addMemberToConversation() {
+  return (dispatch, getState) => {
+    const state = getState()
+    const { newMemberUsername } = state.fields
+    const { uid } = state.ownIdentity
+    const { conversationRef } = state.memberMenu
+
+    if (newMemberUsername === '') {
+      return
+    }
+
+    const newMemberUsernameRef = db.collection('usernames').doc(newMemberUsername)
+    newMemberUsernameRef.get().then(newMemberUsernameDoc => {
+      if (!newMemberUsernameDoc.exists) {
+        alert('User ' + newMemberUsername + ' does not exist.')
+        return
+      }
+      const { uid } = newMemberUsernameDoc.data()
+      const newMemberRef = db.collection('users').doc(uid)
+      newMemberRef.get().then(newMemberDoc => {
+        if (!newMemberDoc.exists) {
+          alert('User ' + newMemberUsername + ' does not exist.')
+          return
+        }
+        const existingConversationRefs = newMemberDoc.data().conversations
+        conversationRef.get().then(conversationDoc => {
+          const { members: existingMemberRefs } = conversationDoc.data()
+          conversationRef.update({
+            members: existingMemberRefs.concat([newMemberRef])
+          }).then(() => {
+            newMemberRef.update({
+              conversations: existingConversationRefs.concat([conversationRef])
+            })
+          })
+        })
+      })
+    })
+
+    dispatch(editNewMemberUsername(''))
+  }
+}
+
 function clearOwnIdentity() {
   return { type: 'CLEAR_OWN_IDENTITY' }
 }
@@ -57,6 +99,10 @@ export function editNewConversationName(value) {
   return { type: 'EDIT_NEW_CONVERSATION_NAME', value }
 }
 
+export function editNewMemberUsername(value) {
+  return { type: 'EDIT_NEW_MEMBER_USERNAME', value }
+}
+
 export function editReply(value) {
   return { type: 'EDIT_REPLY', value }
 }
@@ -67,6 +113,10 @@ export function editUsername(value) {
 
 export function exitConversation() {
   return { type: 'EXIT_CONVERSATION' }
+}
+
+function exitMemberMenu() {
+  return { type: 'EXIT_MEMBER_MENU' }
 }
 
 export function focusMessage(focusedMessage) {
@@ -167,6 +217,10 @@ function navigateToLoginPage() {
   return { type: 'NAVIGATE_TO_LOGIN_PAGE' }
 }
 
+function navigateToMemberMenu(memberMenu, conversationUnsubscriber) {
+  return { type: 'NAVIGATE_TO_MEMBER_MENU', memberMenu, conversationUnsubscriber }
+}
+
 export function openSelectedConversation() {
   return (dispatch, getState) => {
     const state = getState()
@@ -234,9 +288,32 @@ export function openSelectedConversation() {
 }
 
 export function openSelectedConversationMemberMenu() {
-  // TODO: Reducer
-  alert('Opening member menu...')
-  return { type: 'OPEN_SELECTED_CONVERSATION_MEMBER_MENU'}
+  return (dispatch, getState) => {
+    const state = getState()
+    const conversationSummary = state.fields.selectedConversation
+    const conversationRef = conversationSummary.ref
+
+    const unsubscribe = conversationRef.onSnapshot(conversationDoc => {
+      const memberRefs = conversationDoc.data().members
+      const memberNameDictPromises = memberRefs.map(memberRef => new Promise((resolve, reject) => {
+        memberRef.get().then(memberDoc => {
+          const data = memberDoc.data()
+          resolve({
+            displayName: data.displayName,
+            username: data.username.id
+          })
+        }).catch(reject)
+      }))
+      Promise.all(memberNameDictPromises).then(memberNameDicts => {
+        const memberMenu = {
+          conversationRootText: conversationSummary.rootText,
+          conversationRef,
+          members: memberNameDicts
+        }
+        dispatch(navigateToMemberMenu(memberMenu, unsubscribe))
+      })
+    })
+  }
 }
 
 export function selectConversation(conversationSummary) {
@@ -303,6 +380,20 @@ export function unsubscribeAndExitConversation() {
 
     dispatch(exitConversation())
   }
+}
+
+export function unsubscribeAndExitMemberMenu() {
+  return (dispatch, getState) => {
+    const unsubscribe = getState().conversationUnsubscriber
+    unsubscribe(
+
+      dispatch(exitMemberMenu())
+    )
+  }
+}
+
+export function updateNewMemberUsernameInputFocus(value) {
+  return { type: 'UPDATE_NEW_MEMBER_USERNAME_INPUT_FOCUS', value }
 }
 
 export function updateNewConversationNameInputFocus(value) {
