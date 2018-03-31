@@ -405,7 +405,35 @@ export function updateReplyInputFocus(value) {
 }
 
 export function withdrawFromSelectedConversation() {
-  // TODO Reducer
-  alert('Withdrawing')
-  return { type: 'WITHDRAW_FROM_SELECTED_CONVERSATION' }
+  return (dispatch, getState) => {
+    const state = getState()
+    const conversationSummary = state.fields.selectedConversation
+    const conversationRef = conversationSummary.ref
+    const { uid } = state.ownIdentity
+    const userRef = db.collection('users').doc(uid)
+
+    conversationRef.get().then(conversationDoc => {
+      const { members: memberRefs } = conversationDoc.data()
+      const updatedMemberRefs = memberRefs.filter(memberRef => {
+        return memberRef.id !== uid
+      })
+      // JICYDK, Ternary short-circuits
+      const withdrawalPromise = updatedMemberRefs.length > 0
+        ? conversationRef.update({
+          members: updatedMemberRefs
+        })
+        : conversationRef.delete()
+      withdrawalPromise.then(() => {
+        userRef.get().then(userDoc => {
+          const { conversations: conversationRefs } = userDoc.data()
+          const updatedConversationRefs = conversationRefs.filter(conversationRef2 => {
+            return conversationRef2.id !== conversationRef.id
+          })
+          userRef.update({
+            conversations: updatedConversationRefs
+          })
+        })
+      })
+    })
+  }
 }
