@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import BarButton from '../components/BarButton'
-import CircleButton from '../components/CircleButton'
 import InputBar from '../components/InputBar'
 
 import {
