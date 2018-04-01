@@ -122,7 +122,9 @@ const ConversationSelector = ({
             onClick={() => {selectConversation(conversationSummary)}}
             text={conversationSummary.rootText}
             icon={{
-              text: '?'
+              text: '',
+              color: '#22252A',
+              backgroundColor: '#22252A'
             }}
             theme="white"
             isIlluminated={!isNewConversationNameInputFocused && conversationSummary === selectedConversation}

@@ -55,6 +55,8 @@ const mapStateToProps = state => {
   return {
     ownName: state.ownIdentity.name,
 
+    memberDict: state.conversationContents.memberNameDict,
+
     rootText: state.conversationContents.rootText,
     parentMessages: getParentMessagesFromState(state),
     focusedMessage: state.fields.focusedMessage,
@@ -92,6 +94,8 @@ const mapDispatchToProps = dispatch => {
 const Conversation = ({
   ownName,
 
+  memberDict,
+
   rootText,
   parentMessages,
   focusedMessage,
@@ -123,7 +127,9 @@ const Conversation = ({
         text={rootText}
         theme="green"
         icon={{
-          text: '?'
+          text: '',
+          color: '#22252A',
+          backgroundColor: '#22252A'
         }}
         onClick={() => focusMessage(null)}
         isIlluminated={!isReplyInputFocused && (focusedMessage === null)}
@@ -134,7 +140,7 @@ const Conversation = ({
           text={message.text}
           theme="green"
           icon={{
-            text: '?'
+            text: memberDict[message.authorId].displayName.charAt(0)
           }}
           onClick={() => focusMessage(message)}
         />
@@ -145,7 +151,7 @@ const Conversation = ({
           theme="green"
           isIlluminated={!isReplyInputFocused}
           icon={{
-            text: '?'
+            text: memberDict[focusedMessage.authorId].displayName.charAt(0)
           }}
         />
       }
@@ -158,7 +164,7 @@ const Conversation = ({
             text={message.text}
             theme="green"
             icon={{
-              text: '?'
+              text: memberDict[message.authorId].displayName.charAt(0)
             }}
             onClick={() => focusMessage(message)}
           />
