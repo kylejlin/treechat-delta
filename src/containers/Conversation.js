@@ -54,6 +54,7 @@ const getChildMessagesFromState = state => {
 const mapStateToProps = state => {
   return {
     ownName: state.ownIdentity.name,
+    ownUsername: state.ownIdentity.username,
 
     memberDict: state.conversationContents.memberNameDict,
 
@@ -93,6 +94,7 @@ const mapDispatchToProps = dispatch => {
 
 const Conversation = ({
   ownName,
+  ownUsername,
 
   memberDict,
 
@@ -138,7 +140,11 @@ const Conversation = ({
         <BarButton
           key={message.messageId}
           text={message.text}
-          theme="green"
+          theme={
+            memberDict[message.authorId].username === ownUsername
+              ? 'blue'
+              : 'green'
+          }
           icon={{
             text: memberDict[message.authorId].displayName.charAt(0)
           }}
@@ -148,7 +154,11 @@ const Conversation = ({
       {focusedMessage !== null &&
         <BarButton
           text={focusedMessage.text}
-          theme="green"
+          theme={
+            memberDict[focusedMessage.authorId].username === ownUsername
+              ? 'blue'
+              : 'green'
+          }
           isIlluminated={!isReplyInputFocused}
           icon={{
             text: memberDict[focusedMessage.authorId].displayName.charAt(0)
@@ -162,7 +172,11 @@ const Conversation = ({
           <BarButton
             key={message.messageId}
             text={message.text}
-            theme="green"
+            theme={
+              memberDict[message.authorId].username === ownUsername
+                ? 'blue'
+                : 'green'
+            }
             icon={{
               text: memberDict[message.authorId].displayName.charAt(0)
             }}

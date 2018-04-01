@@ -5,7 +5,8 @@ export default {
   },
   ownIdentity: {
     name: '?',
-    uid: null
+    uid: null,
+    username: '?'
   },
   conversationSummaries: [],
   conversationContents: null,

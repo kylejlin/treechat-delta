@@ -138,8 +138,10 @@ export function getAndHandleAuthState() {
         const userRef = db.collection('users').doc(uid)
         userRef.get().then(userDoc => {
           if (userDoc.exists) {
-            const { displayName } = userDoc.data() || ''
-            dispatch(login(displayName, uid))
+            const data = userDoc.data()
+            const displayName = data.displayName || ''
+            const username = data.username.id
+            dispatch(login(displayName, uid, username))
             userRef.onSnapshot(userDoc => {
               dispatch(getAndStoreConversationRefs(userDoc.data().conversations))
             })
@@ -208,8 +210,8 @@ export function joinWithGoogle() {
   }
 }
 
-function login(ownName, ownUid) {
-  return { type: 'LOGIN', ownName, ownUid }
+function login(ownName, ownUid, ownUsername) {
+  return { type: 'LOGIN', ownName, ownUid, ownUsername }
 }
 
 function navigateToConversation(conversationContents, conversationUnsubscriber) {

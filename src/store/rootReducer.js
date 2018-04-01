@@ -108,7 +108,8 @@ export default (state = initState, action) => {
         },
         ownIdentity: {
           name: action.ownName,
-          uid: action.ownUid
+          uid: action.ownUid,
+          username: action.ownUsername
         }
       }
     case 'NAVIGATE_TO_CONVERSATION':
