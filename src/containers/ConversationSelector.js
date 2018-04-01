@@ -143,6 +143,7 @@ const ConversationSelector = ({
               text: <img
                 src={ownPhotoURL}
                 className="Treechat-circle-icon-image"
+                alt=""
               />
             }}
             submitIcon={{

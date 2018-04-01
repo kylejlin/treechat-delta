@@ -151,6 +151,7 @@ const Conversation = ({
             text: <img
               src={memberDict[message.authorId].photoURL}
               className="Treechat-circle-icon-image"
+              alt=""
             />
           }}
           onClick={() => focusMessage(message)}
@@ -169,6 +170,7 @@ const Conversation = ({
             text: <img
               src={memberDict[focusedMessage.authorId].photoURL}
               className="Treechat-circle-icon-image"
+              alt=""
             />
           }}
         />
@@ -189,6 +191,7 @@ const Conversation = ({
               text: <img
                 src={memberDict[message.authorId].photoURL}
                 className="Treechat-circle-icon-image"
+                alt=""
               />
             }}
             onClick={() => focusMessage(message)}
@@ -207,6 +210,7 @@ const Conversation = ({
             text: <img
               src={ownPhotoURL}
               className="Treechat-circle-icon-image"
+              alt=""
             />
           }}
           submitIcon={{

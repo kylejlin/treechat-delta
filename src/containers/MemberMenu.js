@@ -65,6 +65,7 @@ const MemberMenu = ({
             text: <img
               src={member.photoURL}
               className="Treechat-circle-icon-image"
+              alt=""
             />
           }}
           theme="white"
