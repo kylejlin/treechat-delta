@@ -2,8 +2,8 @@ import React from 'react'
 import './BarButton.css'
 
 const defaultIcon = {
-  backgroundColor: '#22252A',
-  color: '#eee',
+  backgroundColor: 'none',
+  color: 'none',
   text: '?'
 }
 

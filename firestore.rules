@@ -39,7 +39,8 @@ service cloud.firestore {
       allow create: if user == request.auth.uid
         && request.resource.data.displayName is string
         && request.resource.data.conversations == []
-        && newUserHasUsername();
+        && newUserHasUsername()
+        && request.resource.data.photoURL is string;
       allow update: if (
         user == request.auth.uid
         && request.resource.data.displayName is string

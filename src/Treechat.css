@@ -49,3 +49,9 @@
   width: 92.5vw;
   font-size: 5vw;
 }
+
+.Treechat-circle-icon-image {
+  border-radius: 10vw;
+  width: 10vw;
+  height: 10vw;
+}

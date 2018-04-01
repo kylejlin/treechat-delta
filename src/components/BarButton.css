@@ -6,14 +6,15 @@
   text-align: left;
 }
 
+.BarButton * {
+  vertical-align: middle;
+}
+
 .BarButton-illuminated {
   box-shadow: 0 0 7vw 1vw #000D;
 }
 
 .BarButton-icon {
-  background-color: #22252A;
-  color: #eee;
-
   font-size: 7vw;
 
   border-radius: 10vw;

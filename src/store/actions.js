@@ -134,19 +134,20 @@ export function getAndHandleAuthState() {
   return (dispatch, getState) => {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        const { uid, displayName } = user
+        const { uid, displayName, photoURL } = user
         const userRef = db.collection('users').doc(uid)
         userRef.get().then(userDoc => {
           if (userDoc.exists) {
             const data = userDoc.data()
             const displayName = data.displayName || ''
             const username = data.username.id
-            dispatch(login(displayName, uid, username))
+            const photoURL = data.photoURL
+            dispatch(login(displayName, uid, username, photoURL))
             userRef.onSnapshot(userDoc => {
               dispatch(getAndStoreConversationRefs(userDoc.data().conversations))
             })
           } else {
-            dispatch(navigateToJoinPage(uid, displayName))
+            dispatch(navigateToJoinPage(uid, displayName, photoURL))
           }
         })
       } else {
@@ -182,7 +183,7 @@ export function joinWithGoogle() {
   return (dispatch, getState) => {
     const state = getState()
     const { username } = state.fields
-    const { uid, name: displayName } = state.ownIdentity
+    const { uid, name: displayName, photoURL } = state.ownIdentity
 
     if (username === '') {
       return
@@ -197,7 +198,8 @@ export function joinWithGoogle() {
       userRef.set({
         displayName,
         conversations: [],
-        username: usernameRef
+        username: usernameRef,
+        photoURL
       }).then(() => {
         dispatch(login(displayName, uid))
         userRef.onSnapshot(userDoc => {
@@ -210,16 +212,16 @@ export function joinWithGoogle() {
   }
 }
 
-function login(ownName, ownUid, ownUsername) {
-  return { type: 'LOGIN', ownName, ownUid, ownUsername }
+function login(ownName, ownUid, ownUsername, photoURL) {
+  return { type: 'LOGIN', ownName, ownUid, ownUsername, photoURL }
 }
 
 function navigateToConversation(conversationContents, conversationUnsubscriber) {
   return { type: 'NAVIGATE_TO_CONVERSATION', conversationContents, conversationUnsubscriber }
 }
 
-function navigateToJoinPage(uid, displayName) {
-  return { type: 'NAVIGATE_TO_JOIN_PAGE', uid, displayName }
+function navigateToJoinPage(uid, displayName, photoURL) {
+  return { type: 'NAVIGATE_TO_JOIN_PAGE', uid, displayName, photoURL }
 }
 
 function navigateToLoginPage() {
@@ -252,7 +254,8 @@ export function openSelectedConversation() {
           resolve({
             id: memberRef.id,
             displayName: data.displayName,
-            username: data.username.id
+            username: data.username.id,
+            photoURL: data.photoURL
           })
         })
       }))
@@ -262,7 +265,8 @@ export function openSelectedConversation() {
         for (let nameMap of nameMaps) {
           memberNameDict[nameMap.id] = {
             displayName: nameMap.displayName,
-            username: nameMap.username
+            username: nameMap.username,
+            photoURL: nameMap.photoURL
           }
         }
 
@@ -309,7 +313,8 @@ export function openSelectedConversationMemberMenu() {
           const data = memberDoc.data()
           resolve({
             displayName: data.displayName,
-            username: data.username.id
+            username: data.username.id,
+            photoURL: data.photoURL
           })
         }).catch(reject)
       }))

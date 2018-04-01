@@ -55,6 +55,7 @@ const mapStateToProps = state => {
   return {
     ownName: state.ownIdentity.name,
     ownUsername: state.ownIdentity.username,
+    ownPhotoURL: state.ownIdentity.photoURL,
 
     memberDict: state.conversationContents.memberNameDict,
 
@@ -95,6 +96,7 @@ const mapDispatchToProps = dispatch => {
 const Conversation = ({
   ownName,
   ownUsername,
+  ownPhotoURL,
 
   memberDict,
 
@@ -146,7 +148,10 @@ const Conversation = ({
               : 'green'
           }
           icon={{
-            text: memberDict[message.authorId].displayName.charAt(0)
+            text: <img
+              src={memberDict[message.authorId].photoURL}
+              className="Treechat-circle-icon-image"
+            />
           }}
           onClick={() => focusMessage(message)}
         />
@@ -161,7 +166,10 @@ const Conversation = ({
           }
           isIlluminated={!isReplyInputFocused}
           icon={{
-            text: memberDict[focusedMessage.authorId].displayName.charAt(0)
+            text: <img
+              src={memberDict[focusedMessage.authorId].photoURL}
+              className="Treechat-circle-icon-image"
+            />
           }}
         />
       }
@@ -178,7 +186,10 @@ const Conversation = ({
                 : 'green'
             }
             icon={{
-              text: memberDict[message.authorId].displayName.charAt(0)
+              text: <img
+                src={memberDict[message.authorId].photoURL}
+                className="Treechat-circle-icon-image"
+              />
             }}
             onClick={() => focusMessage(message)}
           />
@@ -193,7 +204,10 @@ const Conversation = ({
           onFocus={() => updateReplyInputFocus(true)}
           onBlur={() => updateReplyInputFocus(false)}
           leftIcon={{
-            text: ownName.charAt(0)
+            text: <img
+              src={ownPhotoURL}
+              className="Treechat-circle-icon-image"
+            />
           }}
           submitIcon={{
             backgroundColor: '#eee',

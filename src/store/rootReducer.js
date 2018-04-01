@@ -109,7 +109,8 @@ export default (state = initState, action) => {
         ownIdentity: {
           name: action.ownName,
           uid: action.ownUid,
-          username: action.ownUsername
+          username: action.ownUsername,
+          photoURL: action.photoURL
         }
       }
     case 'NAVIGATE_TO_CONVERSATION':
@@ -127,7 +128,8 @@ export default (state = initState, action) => {
         },
         ownIdentity: {
           name: action.displayName,
-          uid: action.uid
+          uid: action.uid,
+          photoURL: action.photoURL
         }
       }
     case 'NAVIGATE_TO_LOGIN_PAGE':

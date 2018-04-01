@@ -38,6 +38,7 @@ const createBackgroundClickHandler = handler => {
 const mapStateToProps = state => {
   return {
     ownName: state.ownIdentity.name,
+    ownPhotoURL: state.ownIdentity.photoURL,
     conversationSummaries: state.conversationSummaries,
     newConversationName: state.fields.newConversationName,
     isNewConversationNameInputFocused: state.uiState.isNewConversationNameInputFocused,
@@ -88,6 +89,7 @@ const ConversationSelector = ({
   onBackgroundClick,
 
   ownName,
+  ownPhotoURL,
 
   conversationSummaries,
 
@@ -138,7 +140,10 @@ const ConversationSelector = ({
             onFocus={() => updateNewConversationNameInputFocus(true)}
             onBlur={() => updateNewConversationNameInputFocus(false)}
             leftIcon={{
-              text: ownName.charAt(0)
+              text: <img
+                src={ownPhotoURL}
+                className="Treechat-circle-icon-image"
+              />
             }}
             submitIcon={{
               text: '+'

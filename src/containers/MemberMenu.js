@@ -62,7 +62,10 @@ const MemberMenu = ({
           key={member.username}
           text={member.displayName + ' (' + member.username + ')'}
           icon={{
-            text: '?'
+            text: <img
+              src={member.photoURL}
+              className="Treechat-circle-icon-image"
+            />
           }}
           theme="white"
         />
