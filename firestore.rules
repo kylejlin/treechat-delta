@@ -1,0 +1,73 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function userRef() {
+      return /databases/$(database)/documents/users/$(request.auth.uid);
+    }
+
+    function aExtendsB(greater, lesser) {
+      return lesser == greater
+        || lesser.size() == 0
+        || lesser == greater[0:(greater.size() - 1)];
+    }
+
+    function messageHasParent() {
+      return request.resource.data.parent == null
+        || exists(/databases/$(database)/documents/messages/$(get(request.resource.data.parent).id));
+    }
+
+    function newUserHasUsername() {
+      return request.auth.uid ==
+        get(/databases/$(database)/documents/usernames/$(get(request.resource.data.username).id)).data.uid;
+    }
+
+    function oneLegalConversationWasAdded() {
+      return request.resource.data.displayName == resource.data.displayName
+        && request.resource.data.username == resource.data.username
+        && aExtendsB(request.resource.data.conversations, resource.data.conversations)
+        && exists(/databases/$(database)/documents/conversations/$(get(request.resource.data.conversations[request.resource.data.conversations.size() - 1]).id))
+    }
+
+    match /usernames/{username} {
+      allow read: if true;
+      allow create: if request.resource.data.uid == request.auth.uid
+        && username is string
+        && username.size() > 0;
+    }
+
+    match /users/{user} {
+      allow read: if true;
+      allow create: if user == request.auth.uid
+        && request.resource.data.displayName is string
+        && request.resource.data.conversations == []
+        && newUserHasUsername();
+      allow update: if (
+        user == request.auth.uid
+        && request.resource.data.displayName is string
+        && request.resource.data.conversations is list
+      ) || oneLegalConversationWasAdded();
+    }
+
+    match /conversations/{conversation} {
+      allow read: if userRef() in resource.data.members;
+      allow create: if exists(userRef())
+        && request.resource.data.rootText is string
+        && userRef() in request.resource.data.members
+        && [] == request.resource.data.messages;
+      allow update: if exists(userRef())
+        && userRef() in resource.data.members
+        && request.resource.data.rootText == resource.data.rootText
+        && request.resource.data.members is list
+        && aExtendsB(request.resource.data.messages, resource.data.messages);
+      allow delete: if userRef() in resource.data.members;
+    }
+
+    match /messages/{message} {
+      allow read: if userRef() in get(resource.data.conversation).data.members;
+      allow create: if userRef() in get(request.resource.data.conversation).data.members
+        && request.resource.data.text is string
+        && request.resource.data.author == userRef()
+        && messageHasParent();
+      allow delete: if !exists(resource.data.conversation);
+    }
+  }
+}
