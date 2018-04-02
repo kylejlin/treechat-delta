@@ -9,6 +9,10 @@ import {
   updateNewDisplayNameInputFocus,
   changeDisplayName,
 
+  editNewPhotoURL,
+  updateNewPhotoURLInputFocus,
+  changePhotoURL,
+
   actuallySignOut,
   exitSettingsMenu
 } from '../store/actions'
@@ -19,7 +23,10 @@ const mapStateToProps = state => {
     ownPhotoURL: state.ownIdentity.photoURL,
 
     newDisplayName: state.fields.newDisplayName,
-    isNewDisplayNameInputFocused: state.uiState.isNewDisplayNameInputFocused
+    isNewDisplayNameInputFocused: state.uiState.isNewDisplayNameInputFocused,
+
+    newPhotoURL: state.fields.newPhotoURL,
+    isNewPhotoURLInputFocused: state.uiState.isNewPhotoURLInputFocused
   }
 }
 
@@ -33,6 +40,16 @@ const mapDispatchToProps = dispatch => {
     },
     changeDisplayName: () => {
       dispatch(changeDisplayName())
+    },
+
+    editNewPhotoURL: value => {
+      dispatch(editNewPhotoURL(value))
+    },
+    updateNewPhotoURLInputFocus: isFocused => {
+      dispatch(updateNewPhotoURLInputFocus(isFocused))
+    },
+    changePhotoURL: () => {
+      dispatch(changePhotoURL())
     },
 
     actuallySignOut: () => {
@@ -54,6 +71,12 @@ const SettingsMenu = ({
   isNewDisplayNameInputFocused,
   updateNewDisplayNameInputFocus,
   changeDisplayName,
+
+  newPhotoURL,
+  editNewPhotoURL,
+  isNewPhotoURLInputFocused,
+  updateNewPhotoURLInputFocus,
+  changePhotoURL,
 
   actuallySignOut,
 
@@ -80,6 +103,25 @@ const SettingsMenu = ({
           }}
           onSubmit={changeDisplayName}
           isIlluminated={isNewDisplayNameInputFocused}
+        />
+        <InputBar
+          value={newPhotoURL}
+          placeholder={'Change photo URL (currently ' + ownPhotoURL + ')'}
+          onChange={editNewPhotoURL}
+          onFocus={() => updateNewPhotoURLInputFocus(true)}
+          onBlur={() => updateNewPhotoURLInputFocus(false)}
+          leftIcon={{
+            text: <img
+              src={ownPhotoURL}
+              className="Treechat-circle-icon-image"
+              alt=""
+            />
+          }}
+          submitIcon={{
+            text: '>'
+          }}
+          onSubmit={changePhotoURL}
+          isIlluminated={isNewPhotoURLInputFocused}
         />
         <BarButton
           onClick={actuallySignOut}

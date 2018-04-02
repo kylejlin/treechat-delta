@@ -55,6 +55,14 @@ export default (state = initState, action) => {
           newMemberUsername: action.value
         }
       }
+    case 'EDIT_NEW_PHOTO_URL':
+      return {
+        ...state,
+        fields: {
+          ...state.fields,
+          newPhotoURL: action.value
+        }
+      }
     case 'EDIT_REPLY':
       return {
         ...state,
@@ -222,6 +230,14 @@ export default (state = initState, action) => {
         uiState: {
           ...state.uiState,
           isNewMemberUsernameInputFocused: action.value
+        }
+      }
+    case 'UPDATE_NEW_PHOTO_URL_INPUT_FOCUS':
+      return {
+        ...state,
+        uiState: {
+          ...state.uiState,
+          isNewPhotoURLInputFocused: action.value
         }
       }
     case 'UPDATE_REPLY_INPUT_FOCUS':

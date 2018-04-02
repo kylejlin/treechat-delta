@@ -22,7 +22,8 @@ export default {
     reply: '',
     username: '',
     newMemberUsername: '',
-    newDisplayName: ''
+    newDisplayName: '',
+    newPhotoURL: ''
   },
   uiState: {
     isNewConversationNameInputFocused: false,
@@ -31,6 +32,7 @@ export default {
     isNewMemberUsernameInputFocused: false,
     isConfirmingWithdrawal: false,
     isSettingsMenuOpen: false,
-    isNewDisplayNameInputFocused: false
+    isNewDisplayNameInputFocused: false,
+    isNewPhotoURLInputFocused: false
   }
 }

@@ -71,7 +71,28 @@ export function changeDisplayName() {
       displayName: newDisplayName
     }).then(() => {
       dispatch(login(newDisplayName, uid, username, photoURL))
-      dispatch(editNewDisplayName(''))
+      dispatch(editNewPhotoURL(''))
+    })
+  }
+}
+
+export function changePhotoURL() {
+  return (dispatch, getState) => {
+    const state = getState()
+    const { name, uid, username } = state.ownIdentity
+    const { newPhotoURL } = state.fields
+
+    if (false) {// TODO: regex validation (currently turned off so I can test script injection)
+      alert('Invalid URL.')
+      return
+    }
+
+    const userRef = db.collection('users').doc(uid)
+    userRef.update({
+      photoURL: newPhotoURL
+    }).then(() => {
+      dispatch(login(name, uid, username, newPhotoURL))
+      dispatch(editNewPhotoURL(''))
     })
   }
 }
@@ -133,6 +154,10 @@ export function editNewDisplayName(value) {
 
 export function editNewMemberUsername(value) {
   return { type: 'EDIT_NEW_MEMBER_USERNAME', value }
+}
+
+export function editNewPhotoURL(value) {
+  return { type: 'EDIT_NEW_PHOTO_URL', value }
 }
 
 export function editReply(value) {
@@ -443,16 +468,20 @@ export function unsubscribeAndExitMemberMenu() {
   }
 }
 
-export function updateNewMemberUsernameInputFocus(value) {
-  return { type: 'UPDATE_NEW_MEMBER_USERNAME_INPUT_FOCUS', value }
-}
-
 export function updateNewConversationNameInputFocus(value) {
   return { type: 'UPDATE_NEW_CONVERSATION_NAME_INPUT_FOCUS', value }
 }
 
 export function updateNewDisplayNameInputFocus(value) {
   return { type: 'UPDATE_NEW_DISPLAY_NAME_INPUT_FOCUS', value }
+}
+
+export function updateNewMemberUsernameInputFocus(value) {
+  return { type: 'UPDATE_NEW_MEMBER_USERNAME_INPUT_FOCUS', value }
+}
+
+export function updateNewPhotoURLInputFocus(value) {
+  return { type: 'UPDATE_NEW_PHOTO_URL_INPUT_FOCUS', value }
 }
 
 export function updateReplyInputFocus(value) {
