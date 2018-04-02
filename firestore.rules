@@ -23,8 +23,16 @@ service cloud.firestore {
     function oneLegalConversationWasAdded() {
       return request.resource.data.displayName == resource.data.displayName
         && request.resource.data.username == resource.data.username
+        && request.resource.data.photoURL == resource.data.photoURL
         && aExtendsB(request.resource.data.conversations, resource.data.conversations)
         && exists(/databases/$(database)/documents/conversations/$(get(request.resource.data.conversations[request.resource.data.conversations.size() - 1]).id))
+    }
+
+    function displayNameIsValid() {
+      return request.resource.data.displayName is string
+        && request.resource.data.displayName.size() > 0
+        && request.resource.data.displayName.size() < 33
+        && !request.resource.data.displayName.matches('[[:space:]]*');
     }
 
     match /usernames/{username} {
@@ -37,14 +45,16 @@ service cloud.firestore {
     match /users/{user} {
       allow read: if true;
       allow create: if user == request.auth.uid
-        && request.resource.data.displayName is string
+        && displayNameIsValid()
         && request.resource.data.conversations == []
         && newUserHasUsername()
         && request.resource.data.photoURL is string;
       allow update: if (
         user == request.auth.uid
-        && request.resource.data.displayName is string
+        && displayNameIsValid()
+        && request.resource.data.username == resource.data.username
         && request.resource.data.conversations is list
+        && request.resource.data.photoURL is string
       ) || oneLegalConversationWasAdded();
     }
 

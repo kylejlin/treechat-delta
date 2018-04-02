@@ -53,8 +53,26 @@ export function addMemberToConversation() {
 
 export function changeDisplayName() {
   return (dispatch, getState) => {
-    // TODO
-    alert('Changing name to ' + getState().fields.newDisplayName)
+    const state = getState()
+    const { uid, username, photoURL } = state.ownIdentity
+    const userRef = db.collection('users').doc(uid)
+    const { newDisplayName } = state.fields
+
+    if (
+      newDisplayName.length === 0
+      || newDisplayName.length > 32
+      || /^\s*$/.test(newDisplayName)
+    ) {
+      alert('Illegally formatted display name!')
+      return
+    }
+
+    userRef.update({
+      displayName: newDisplayName
+    }).then(() => {
+      dispatch(login(newDisplayName, uid, username, photoURL))
+      dispatch(editNewDisplayName(''))
+    })
   }
 }
 
