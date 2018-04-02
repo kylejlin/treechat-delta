@@ -143,6 +143,7 @@ const Conversation = ({
         <Message
           key={message.messageId}
           text={message.text}
+          authorDisplayName={memberDict[message.authorId].displayName}
           theme={
             memberDict[message.authorId].username === ownUsername
               ? 'blue'
@@ -161,6 +162,7 @@ const Conversation = ({
       {focusedMessage !== null &&
         <Message
           text={focusedMessage.text}
+          authorDisplayName={memberDict[focusedMessage.authorId].displayName}
           theme={
             memberDict[focusedMessage.authorId].username === ownUsername
               ? 'blue'
@@ -183,6 +185,7 @@ const Conversation = ({
           <Message
             key={message.messageId}
             text={message.text}
+            authorDisplayName={memberDict[message.authorId].displayName}
             theme={
               memberDict[message.authorId].username === ownUsername
                 ? 'blue'
