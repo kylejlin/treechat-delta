@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import './Conversation.css'
 
 import BarButton from '../components/BarButton'
+import Message from '../components/Message'
 import InputBar from '../components/InputBar'
 
 import {
@@ -139,7 +140,7 @@ const Conversation = ({
         isIlluminated={!isReplyInputFocused && (focusedMessage === null)}
       />
       {parentMessages.map(message => (
-        <BarButton
+        <Message
           key={message.messageId}
           text={message.text}
           theme={
@@ -147,18 +148,18 @@ const Conversation = ({
               ? 'blue'
               : 'green'
           }
-          icon={{
-            text: <img
+          icon={
+            <img
               src={memberDict[message.authorId].photoURL}
               className="Treechat-circle-icon-image"
               alt=""
             />
-          }}
+          }
           onClick={() => focusMessage(message)}
         />
       ))}
       {focusedMessage !== null &&
-        <BarButton
+        <Message
           text={focusedMessage.text}
           theme={
             memberDict[focusedMessage.authorId].username === ownUsername
@@ -166,20 +167,20 @@ const Conversation = ({
               : 'green'
           }
           isIlluminated={!isReplyInputFocused}
-          icon={{
-            text: <img
+          icon={
+            <img
               src={memberDict[focusedMessage.authorId].photoURL}
               className="Treechat-circle-icon-image"
               alt=""
             />
-          }}
+          }
         />
       }
     </div>
     <div className="Treechat-container Conversation-bottom-container Treechat-theme-grey">
       {childMessages.length ?
         childMessages.map(message => (
-          <BarButton
+          <Message
             key={message.messageId}
             text={message.text}
             theme={
@@ -187,13 +188,13 @@ const Conversation = ({
                 ? 'blue'
                 : 'green'
             }
-            icon={{
-              text: <img
+            icon={
+              <img
                 src={memberDict[message.authorId].photoURL}
                 className="Treechat-circle-icon-image"
                 alt=""
               />
-            }}
+            }
             onClick={() => focusMessage(message)}
           />
         ))
