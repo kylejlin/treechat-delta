@@ -82,11 +82,6 @@ export function changePhotoURL() {
     const { name, uid, username, googlePhotoURL } = state.ownIdentity
     const { newPhotoURL } = state.fields
 
-    if (false) {// TODO: regex validation (currently turned off so I can test script injection)
-      alert('Invalid URL.')
-      return
-    }
-
     const userRef = db.collection('users').doc(uid)
     userRef.update({
       photoURL: newPhotoURL
