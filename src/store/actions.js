@@ -54,7 +54,7 @@ export function addMemberToConversation() {
 export function changeDisplayName() {
   return (dispatch, getState) => {
     const state = getState()
-    const { uid, username, photoURL } = state.ownIdentity
+    const { uid, username, photoURL, googlePhotoURL } = state.ownIdentity
     const userRef = db.collection('users').doc(uid)
     const { newDisplayName } = state.fields
 
@@ -70,7 +70,7 @@ export function changeDisplayName() {
     userRef.update({
       displayName: newDisplayName
     }).then(() => {
-      dispatch(login(newDisplayName, uid, username, photoURL))
+      dispatch(login(newDisplayName, uid, username, photoURL, googlePhotoURL))
       dispatch(editNewPhotoURL(''))
     })
   }
@@ -79,7 +79,7 @@ export function changeDisplayName() {
 export function changePhotoURL() {
   return (dispatch, getState) => {
     const state = getState()
-    const { name, uid, username } = state.ownIdentity
+    const { name, uid, username, googlePhotoURL } = state.ownIdentity
     const { newPhotoURL } = state.fields
 
     if (false) {// TODO: regex validation (currently turned off so I can test script injection)
@@ -91,7 +91,7 @@ export function changePhotoURL() {
     userRef.update({
       photoURL: newPhotoURL
     }).then(() => {
-      dispatch(login(name, uid, username, newPhotoURL))
+      dispatch(login(name, uid, username, newPhotoURL, googlePhotoURL))
       dispatch(editNewPhotoURL(''))
     })
   }
@@ -192,7 +192,7 @@ export function getAndHandleAuthState() {
   return (dispatch, getState) => {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        const { uid, displayName, photoURL } = user
+        const { uid, displayName, photoURL: googlePhotoURL } = user
         const userRef = db.collection('users').doc(uid)
         userRef.get().then(userDoc => {
           if (userDoc.exists) {
@@ -200,12 +200,12 @@ export function getAndHandleAuthState() {
             const displayName = data.displayName || ''
             const username = data.username.id
             const photoURL = data.photoURL
-            dispatch(login(displayName, uid, username, photoURL))
+            dispatch(login(displayName, uid, username, photoURL, googlePhotoURL))
             userRef.onSnapshot(userDoc => {
               dispatch(getAndStoreConversationRefs(userDoc.data().conversations))
             })
           } else {
-            dispatch(navigateToJoinPage(uid, displayName, photoURL))
+            dispatch(navigateToJoinPage(uid, displayName, googlePhotoURL))
           }
         })
       } else {
@@ -259,7 +259,7 @@ export function joinWithGoogle() {
         username: usernameRef,
         photoURL
       }).then(() => {
-        dispatch(login(displayName, uid))
+        dispatch(login(displayName, uid, username, photoURL, photoURL))
         userRef.onSnapshot(userDoc => {
           dispatch(getAndStoreConversationRefs(userDoc.data().conversations))
         })
@@ -270,8 +270,8 @@ export function joinWithGoogle() {
   }
 }
 
-function login(ownName, ownUid, ownUsername, photoURL) {
-  return { type: 'LOGIN', ownName, ownUid, ownUsername, photoURL }
+function login(ownName, ownUid, ownUsername, photoURL, googlePhotoURL) {
+  return { type: 'LOGIN', ownName, ownUid, ownUsername, photoURL, googlePhotoURL }
 }
 
 function navigateToConversation(conversationContents, conversationUnsubscriber) {
@@ -388,6 +388,19 @@ export function openSelectedConversationMemberMenu() {
         }
         dispatch(navigateToMemberMenu(memberMenu, unsubscribe))
       })
+    })
+  }
+}
+
+export function revertToGooglePhotoURL() {
+  return (dispatch, getState) => {
+    const state = getState()
+    const { name, uid, username, googlePhotoURL } = state.ownIdentity
+    const userRef = db.collection('users').doc(uid)
+    userRef.update({
+      photoURL: googlePhotoURL
+    }).then(() => {
+      dispatch(login(name, uid, username, googlePhotoURL, googlePhotoURL))
     })
   }
 }

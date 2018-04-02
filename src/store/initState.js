@@ -7,7 +7,8 @@ export default {
     name: '?',
     uid: null,
     username: '?',
-    photoURL: null
+    photoURL: null,
+    googlePhotoURL: null
   },
   conversationSummaries: [],
   conversationContents: null,

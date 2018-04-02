@@ -5,6 +5,8 @@ import BarButton from '../components/BarButton'
 import InputBar from '../components/InputBar'
 
 import {
+  revertToGooglePhotoURL,
+  
   editNewDisplayName,
   updateNewDisplayNameInputFocus,
   changeDisplayName,
@@ -22,6 +24,8 @@ const mapStateToProps = state => {
     ownDisplayName: state.ownIdentity.name,
     ownPhotoURL: state.ownIdentity.photoURL,
 
+    googlePhotoURL: state.ownIdentity.googlePhotoURL,
+
     newDisplayName: state.fields.newDisplayName,
     isNewDisplayNameInputFocused: state.uiState.isNewDisplayNameInputFocused,
 
@@ -32,6 +36,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    revertToGooglePhotoURL: () => {
+      dispatch(revertToGooglePhotoURL())
+    },
+
     editNewDisplayName: value => {
       dispatch(editNewDisplayName(value))
     },
@@ -65,6 +73,9 @@ const mapDispatchToProps = dispatch => {
 const SettingsMenu = ({
   ownDisplayName,
   ownPhotoURL,
+
+  googlePhotoURL,
+  revertToGooglePhotoURL,
 
   newDisplayName,
   editNewDisplayName,
@@ -122,6 +133,18 @@ const SettingsMenu = ({
           }}
           onSubmit={changePhotoURL}
           isIlluminated={isNewPhotoURLInputFocused}
+        />
+        <BarButton
+          onClick={revertToGooglePhotoURL}
+          text="Revert to Google Profile Photo"
+          theme="white"
+          icon={{
+            text: <img
+              src={googlePhotoURL}
+              className="Treechat-circle-icon-image"
+              alt=""
+            />
+          }}
         />
         <BarButton
           onClick={actuallySignOut}

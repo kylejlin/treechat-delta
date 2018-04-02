@@ -134,7 +134,8 @@ export default (state = initState, action) => {
           name: action.ownName,
           uid: action.ownUid,
           username: action.ownUsername,
-          photoURL: action.photoURL
+          photoURL: action.photoURL,
+          googlePhotoURL: action.googlePhotoURL
         }
       }
     case 'NAVIGATE_TO_CONVERSATION':
