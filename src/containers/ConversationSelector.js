@@ -19,8 +19,7 @@ import {
   confirmWithdrawalFromSelectedConversation,
   openSelectedConversationMemberMenu,
 
-  confirmSignOut,
-  actuallySignOut
+  navigateToSettingsMenu
 } from '../store/actions'
 
 
@@ -76,11 +75,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(openSelectedConversationMemberMenu())
     },
 
-    confirmSignOut: () => {
-      dispatch(confirmSignOut())
-    },
-    actuallySignOut: () => {
-      dispatch(actuallySignOut())
+    navigateToSettingsMenu: () => {
+      dispatch(navigateToSettingsMenu())
     }
   }
 }
@@ -105,14 +101,7 @@ const ConversationSelector = ({
   confirmWithdrawalFromSelectedConversation,
   openSelectedConversationMemberMenu,
 
-  /*invitee,
-  editInvitee,
-  addInvitee,
-  */
-
-  isConfirmingSignOut,
-  confirmSignOut,
-  actuallySignOut
+  navigateToSettingsMenu
 }) => {
   return (
     <div className="Treechat ConversationSelector" onClick={createBackgroundClickHandler(onBackgroundClick)}>
@@ -154,15 +143,14 @@ const ConversationSelector = ({
           />
         </div>
         <BarButton
-          onClick={isConfirmingSignOut ? actuallySignOut : confirmSignOut}
-          text={!isConfirmingSignOut ? 'Sign out' : 'Tap again to confirm sign out'}
+          onClick={navigateToSettingsMenu}
+          text="Settings"
           icon={{
-            text: 'x',
+            text: '*',
             backgroundColor: '#eee',
-            color: '#921'
+            color: '#22252A'
           }}
-          theme="red"
-          isIlluminated={isConfirmingSignOut}
+          theme="grey"
         />
       </div>
       <div className="ConversationSelector-actions-container Treechat-container Treechat-theme-grey">

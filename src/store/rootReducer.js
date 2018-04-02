@@ -39,6 +39,14 @@ export default (state = initState, action) => {
           newConversationName: action.value
         }
       }
+    case 'EDIT_NEW_DISPLAY_NAME':
+      return {
+        ...state,
+        fields: {
+          ...state.fields,
+          newDisplayName: action.value
+        }
+      }
     case 'EDIT_NEW_MEMBER_USERNAME':
       return {
         ...state,
@@ -81,6 +89,14 @@ export default (state = initState, action) => {
         fields: {
           ...state.fields,
           newMemberUsername: ''
+        }
+      }
+    case 'EXIT_SETTINGS_MENU':
+      return {
+        ...state,
+        uiState: {
+          ...state.uiState,
+          isSettingsMenuOpen: false
         }
       }
     case 'EXIT_WITHDRAWAL_CONFIRMATION_PAGE':
@@ -146,6 +162,14 @@ export default (state = initState, action) => {
         memberMenu: action.memberMenu,
         conversationUnsubscriber: action.conversationUnsubscriber
       }
+    case 'NAVIGATE_TO_SETTINGS_MENU':
+      return {
+        ...state,
+        uiState: {
+          ...state.uiState,
+          isSettingsMenuOpen: true
+        }
+      }
     case 'SELECT_CONVERSATION':
       return {
         ...state,
@@ -182,6 +206,14 @@ export default (state = initState, action) => {
           ...state.uiState,
           isNewConversationNameInputFocused: action.value,
           isConfirmingSignOut: false
+        }
+      }
+    case 'UPDATE_NEW_DISPLAY_NAME_INPUT_FOCUS':
+      return {
+        ...state,
+        uiState: {
+          ...state.uiState,
+          isNewDisplayNameInputFocused: action.value
         }
       }
     case 'UPDATE_NEW_MEMBER_USERNAME_INPUT_FOCUS':

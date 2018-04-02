@@ -51,6 +51,13 @@ export function addMemberToConversation() {
   }
 }
 
+export function changeDisplayName() {
+  return (dispatch, getState) => {
+    // TODO
+    alert('Changing name to ' + getState().fields.newDisplayName)
+  }
+}
+
 function clearOwnIdentity() {
   return { type: 'CLEAR_OWN_IDENTITY' }
 }
@@ -102,6 +109,10 @@ export function editNewConversationName(value) {
   return { type: 'EDIT_NEW_CONVERSATION_NAME', value }
 }
 
+export function editNewDisplayName(value) {
+  return { type: 'EDIT_NEW_DISPLAY_NAME', value }
+}
+
 export function editNewMemberUsername(value) {
   return { type: 'EDIT_NEW_MEMBER_USERNAME', value }
 }
@@ -120,6 +131,10 @@ export function exitConversation() {
 
 function exitMemberMenu() {
   return { type: 'EXIT_MEMBER_MENU' }
+}
+
+export function exitSettingsMenu() {
+  return { type: 'EXIT_SETTINGS_MENU' }
 }
 
 export function exitWithdrawalConfirmationPage() {
@@ -230,6 +245,10 @@ function navigateToLoginPage() {
 
 function navigateToMemberMenu(memberMenu, conversationUnsubscriber) {
   return { type: 'NAVIGATE_TO_MEMBER_MENU', memberMenu, conversationUnsubscriber }
+}
+
+export function navigateToSettingsMenu() {
+  return { type: 'NAVIGATE_TO_SETTINGS_MENU' }
 }
 
 export function openSelectedConversation() {
@@ -412,6 +431,10 @@ export function updateNewMemberUsernameInputFocus(value) {
 
 export function updateNewConversationNameInputFocus(value) {
   return { type: 'UPDATE_NEW_CONVERSATION_NAME_INPUT_FOCUS', value }
+}
+
+export function updateNewDisplayNameInputFocus(value) {
+  return { type: 'UPDATE_NEW_DISPLAY_NAME_INPUT_FOCUS', value }
 }
 
 export function updateReplyInputFocus(value) {

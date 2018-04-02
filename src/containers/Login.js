@@ -20,6 +20,11 @@ const Login = ({
       theme="blue"
       text="Sign in with Google"
       onClick={onSignInWithGoogleClick}
+      icon={{
+        text: '>',
+        color: '#08b',
+        backgroundColor: '#eee'
+      }}
     />
   </div>
 )

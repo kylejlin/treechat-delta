@@ -21,13 +21,16 @@ export default {
     focusedMessage: null,
     reply: '',
     username: '',
-    newMemberUsername: ''
+    newMemberUsername: '',
+    newDisplayName: ''
   },
   uiState: {
     isNewConversationNameInputFocused: false,
     isReplyInputFocused: false,
     isConfirmingSignOut: false,
     isNewMemberUsernameInputFocused: false,
-    isConfirmingWithdrawal: false
+    isConfirmingWithdrawal: false,
+    isSettingsMenuOpen: false,
+    isNewDisplayNameInputFocused: false
   }
 }
