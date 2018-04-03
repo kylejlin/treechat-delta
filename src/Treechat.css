@@ -63,3 +63,7 @@
   display: inline-block;
   margin: 0 2vw 0 1vw;
 }
+
+.Treechat-full-container p {
+  font-size: 4vw;
+}

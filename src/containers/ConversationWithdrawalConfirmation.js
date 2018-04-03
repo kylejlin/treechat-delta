@@ -28,6 +28,12 @@ const ConversationWithdrawalConfirmation = ({
   <div className="Treechat-theme-green Treechat-container Treechat-full-container">
     <h2>Treechat</h2>
     <div className="Treechat-section-header">Leave {rootText}?</div>
+    <p>
+      If you leave, you will no longer be a member of this conversation, meaning
+      you will no longer be able to send or read messages.
+      You will not be able to join back on your own. However, if there are other
+      members in this conversation, they will be able to invite you back.
+    </p>
     <BarButton
       onClick={withdrawFromSelectedConversation}
       text="I'm certain"
