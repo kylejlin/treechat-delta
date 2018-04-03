@@ -55,3 +55,11 @@
   width: 10vw;
   height: 10vw;
 }
+
+.Treechat-circle-icon-image-large {
+  border-radius: 15vw;
+  width: 15vw;
+  height: 15vw;
+  display: inline-block;
+  margin: 0 2vw 0 1vw;
+}

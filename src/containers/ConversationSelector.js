@@ -4,8 +4,11 @@ import { connect } from 'react-redux'
 import './ConversationSelector.css'
 
 import BarButton from '../components/BarButton'
-import CircleButton from '../components/CircleButton'
 import InputBar from '../components/InputBar'
+
+import addMemberIcon from '../icons/addMember.svg'
+import openConversationIcon from '../icons/openConversation.svg'
+import withdrawFromConversationIcon from '../icons/withdrawFromConversation.svg'
 
 import {
   unselectConversationAndUnconfirmSignOut,
@@ -156,26 +159,23 @@ const ConversationSelector = ({
       <div className="ConversationSelector-actions-container Treechat-container Treechat-theme-grey">
         {(!isNewConversationNameInputFocused && selectedConversation) ?
           <div>
-            <CircleButton
-              theme="blue"
-              icon={{
-                text: '>'
-              }}
+            <img
+              src={openConversationIcon}
               onClick={openSelectedConversation}
+              className="Treechat-circle-icon-image-large"
+              alt="Open conversation"
             />
-            <CircleButton
-              theme="blue"
-              icon={{
-                text: 'x'
-              }}
-              onClick={confirmWithdrawalFromSelectedConversation}
-            />
-            <CircleButton
-              theme="blue"
-              icon={{
-                text: '+'
-              }}
+            <img
+              src={addMemberIcon}
               onClick={openSelectedConversationMemberMenu}
+              className="Treechat-circle-icon-image-large"
+              alt="Add members"
+            />
+            <img
+              src={withdrawFromConversationIcon}
+              onClick={confirmWithdrawalFromSelectedConversation}
+              className="Treechat-circle-icon-image-large"
+              alt="Leave conversation"
             />
           </div>
           : 'Tap a conversation to select it.'
