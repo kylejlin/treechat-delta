@@ -77,7 +77,8 @@ service cloud.firestore {
       allow create: if userRef() in get(request.resource.data.conversation).data.members
         && request.resource.data.text is string
         && request.resource.data.author == userRef()
-        && messageHasParent();
+        && messageHasParent()
+        && request.resource.data.timestamp == request.time;
       allow delete: if !exists(resource.data.conversation);
     }
   }

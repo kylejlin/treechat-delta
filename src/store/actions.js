@@ -439,7 +439,8 @@ export function submitReply() {
       text: messageText,
       author: userRef,
       parent: parentMessageRef,
-      conversation: conversationRef
+      conversation: conversationRef,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
     }).then(() => {
       conversationRef.get().then(conversationDoc => {
         const { messages: existingMessageRefs } = conversationDoc.data()
