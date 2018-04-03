@@ -338,7 +338,8 @@ export function openSelectedConversation() {
             authorId: data.author.id,
             text: data.text,
             parentId: data.parent ? data.parent.id : null,
-            messageId: messageRef.id
+            messageId: messageRef.id,
+            timestamp: data.timestamp
           })
         })
       }))
